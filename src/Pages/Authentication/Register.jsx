@@ -1,3 +1,4 @@
+import { sendEmailVerification } from "firebase/auth";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -20,11 +21,26 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const axiosPublic = useAxioPublic();
+
+
+
+
   const onSubmit = (data) => {
     console.log(data);
     createUser(data.email, data.password)
       .then((result) => {
-        const user = result.user;
+        const user = result.user
+        sendEmailVerification(user)
+        .then(() => {
+          console.log("Verification email sent");
+          toast.success("Verification email sent! Please check your inbox.", {
+            position: "top-center",
+            autoClose: 5000,
+          });
+          // Prompt the user to verify their email
+          navigate("/verify-email"); // Redirect to a verify email page
+        });
+       console.log("verification email sent")
         console.log("User created", user);
         const userInfo = {
           name: data?.name || "Anonymous", // Access the 'name' field
@@ -48,6 +64,8 @@ const Register = () => {
           }
         });
       })
+
+      
       .catch((err) => {
         let errorMessage = "An unexpected error occurred. Please try again.";
         if (err.code === "auth/invalid-email") {
@@ -76,6 +94,68 @@ const Register = () => {
         });
       });
   };
+
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  //   createUser(data.email, data.password)
+  //     .then((result) => {
+  //       const user = result.user
+  //      sendEmailVerification(user)
+  //      console.log("verification email sent")
+  //       console.log("User created", user);
+  //       const userInfo = {
+  //         name: data?.name || "Anonymous", // Access the 'name' field
+  //         email: data?.email,
+  //         password: data?.password || "", // Access the 'password' field
+  //       };
+  //       axiosPublic.post("/register-users", userInfo).then((res) => {
+  //         if (res.data.insertedId) {
+  //           reset();
+  //           toast.success("Create User Successfully", {
+  //             position: "top-center",
+  //             autoClose: 5000,
+  //             hideProgressBar: false,
+  //             closeOnClick: false,
+  //             pauseOnHover: true,
+  //             draggable: true,
+  //             progress: undefined,
+  //             theme: "light",
+  //           });
+  //           navigate("/");
+  //         }
+  //       });
+  //     })
+
+      
+  //     .catch((err) => {
+  //       let errorMessage = "An unexpected error occurred. Please try again.";
+  //       if (err.code === "auth/invalid-email") {
+  //         errorMessage = "Invalid email address. Please enter a valid email.";
+  //       } else if (err.code === "auth/invalid-credential") {
+  //         errorMessage = "No user found with this email. Please sign up.";
+  //       } else if (err.code === "auth/email-already-in-use") {
+  //         errorMessage = "Already account create Your email. Please sign up.";
+  //       } else if (err.code === "auth/wrong-password") {
+  //         errorMessage = "Incorrect password. Please try again.";
+  //       } else if (err.code === "auth/network-request-failed") {
+  //         errorMessage =
+  //           "Network error. Please check your internet connection.";
+  //       } else if (err.code === "auth/too-many-requests") {
+  //         errorMessage = "Too many attempts. Try again later.";
+  //       }
+  //       toast.error(errorMessage, {
+  //         position: "top-center",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: false,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     });
+  // };
 
   return (
     <div
@@ -120,7 +200,7 @@ const Register = () => {
                           <input
                             {...field}
                             id="name"
-                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-1 focus:ring-purple-200 ${
                               error
                                 ? "border-red-500"
                                 : field.value
@@ -180,7 +260,7 @@ const Register = () => {
                           <input
                             {...field}
                             id="email"
-                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-1 focus:ring-purple-200 ${
                               error
                                 ? "border-red-500"
                                 : field.value
@@ -240,7 +320,7 @@ const Register = () => {
                             {...field}
                             id="registerPassword"
                             type={showPassword ? "text" : "password"}
-                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                            className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-1 focus:ring-purple-200 ${
                               error ? "border-red-500" : "border-gray-300"
                             }`}
                             placeholder="Enter Password"

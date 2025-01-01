@@ -22,7 +22,7 @@ const Login = () => {
     signIn(data.email, data.password)
       .then((data) => {
         const user = data.user;
-        if (user) {
+        if (user.emailVerified === true) {
           toast.success("Login Successfully", {
             position: "top-center",
             autoClose: 5000,
@@ -33,6 +33,21 @@ const Login = () => {
             progress: undefined,
             theme: "light",
           });
+        } else {
+          toast.error(
+            "Email verification is required. Please check your inbox.",
+            {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          );
+          return;
         }
         navigate(from, { replace: true });
       })
@@ -99,7 +114,7 @@ const Login = () => {
                         <input
                           {...field}
                           id="email"
-                          className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                          className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-1 focus:ring-purple-200 ${
                             error ? "border-red-500" : "border-gray-300"
                           }`}
                           placeholder="Enter Email ID"
@@ -148,7 +163,7 @@ const Login = () => {
                           {...field}
                           id="password"
                           type={showPassword ? "text" : "password"}
-                          className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                          className={`w-full border rounded px-3 py-2 text-gray-700 transition-colors hover:border-orange-300 focus:outline-none focus:ring-1 focus:ring-purple-200 ${
                             error ? "border-red-500" : "border-gray-300"
                           }`}
                           placeholder="Enter Password"
