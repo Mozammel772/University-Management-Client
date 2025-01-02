@@ -45,7 +45,8 @@ const Register = () => {
         const userInfo = {
           name: data?.name || "Anonymous", // Access the 'name' field
           email: data?.email,
-          password: data?.password || "", // Access the 'password' field
+          password: data?.password || "",
+           // Access the 'password' field
         };
         axiosPublic.post("/register-users", userInfo).then((res) => {
           if (res.data.insertedId) {

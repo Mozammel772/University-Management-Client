@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { FaEdit } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
@@ -30,10 +31,10 @@ const ProfileUpdate = () => {
       const res = await axiosSecure.get(`/register-users/${userEmail}`);
       return res.data;
     },
-   
+
     enabled: !!userEmail, // Only run the query if the email exists
   });
-  console.log(userData)
+  console.log(userData);
 
   if (isLoading) return <div>Loading user data...</div>;
   if (isError) return <div>Error loading user data!</div>;
@@ -79,9 +80,11 @@ const ProfileUpdate = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          Update Profile
-        </h2>
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-semibold text-center mb-4">Profile</h2>{" "}
+          <h2 className="text-2xl font-semibold text-center mb-4"><FaEdit/></h2>
+        </div>
+        <div className="divide divide-dotted divide-pink-800"></div>
         <form
           onSubmit={handleSubmit(handleProfileUpdate)}
           className="space-y-4"
