@@ -6,6 +6,7 @@ import Register from "../Authentication/Register";
 import VerifyEmail from "../Authentication/VerifyEmail";
 import Home from "../HomePages/Home";
 import Profile from "../ProfileUpdatePages/Profile";
+import Dashboard from "../Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +35,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
-        element: <Profile/>
-       
+        element: <Profile />
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />
+
       },
     ],
   },
