@@ -8,6 +8,7 @@ import Home from "../HomePages/Home";
 import ChangePassword from "../ProfileUpdatePages/ChangePassword";
 import EditProfile from "../ProfileUpdatePages/EditProfile";
 import Profile from "../ProfileUpdatePages/Profile";
+import Dashboard from "../Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
+<<<<<<< HEAD
         element: <Profile />,
       },
       {
@@ -45,6 +47,14 @@ export const router = createBrowserRouter([
       {
         path: "/changepassword",
         element: <ChangePassword />,
+=======
+        element: <Profile />
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />
+
+>>>>>>> 47c1c742ecaf01f76fa32a34bcbb75b81b1dae01
       },
     ],
   },
