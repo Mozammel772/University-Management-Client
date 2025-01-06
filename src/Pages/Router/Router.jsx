@@ -5,6 +5,8 @@ import Login from "../Authentication/Login";
 import Register from "../Authentication/Register";
 import VerifyEmail from "../Authentication/VerifyEmail";
 import Home from "../HomePages/Home";
+import ChangePassword from "../ProfileUpdatePages/ChangePassword";
+import EditProfile from "../ProfileUpdatePages/EditProfile";
 import Profile from "../ProfileUpdatePages/Profile";
 
 export const router = createBrowserRouter([
@@ -34,8 +36,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
-        element: <Profile/>
-       
+        element: <Profile />,
+      },
+      {
+        path: "/edit-profile",
+        element: <EditProfile />,
+      },
+      {
+        path: "/changepassword",
+        element: <ChangePassword />,
       },
     ],
   },

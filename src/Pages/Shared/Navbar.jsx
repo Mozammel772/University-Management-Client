@@ -1,8 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import Hamburger from "hamburger-react";
 import React, { useState } from "react";
 import { MdDashboard } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useAxioPublic from "../../hooks/useAxiosPublic";
 
 const Navbar = () => {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
@@ -10,7 +12,25 @@ const Navbar = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { user, logOut } = useAuth();
   const [activeLink, setActiveLink] = useState(""); // For managing active link
+  const navigate = useNavigate();
+  const userEmail = user?.email;
+  const axiosPublic = useAxioPublic();
+  const {
+    data: userData,
+    isError,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["userData", userEmail],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/profile/${userEmail}`);
+      return res.data;
+    },
 
+    enabled: !!userEmail, // Only run the query if the email exists
+  });
+
+  
   const toggleDashboardMenu = () => {
     setIsDashboardOpen((prev) => !prev);
     setIsProfileOpen(false); // Close Profile Menu
@@ -26,7 +46,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logOut()
       .then(() => {
-        // Handle successful logout (optional)
+        navigate("/login");
       })
       .catch((error) => {
         // Handle logout error (optional)
@@ -130,11 +150,11 @@ const Navbar = () => {
                 onClick={toggleProfileMenu}
                 className="btn btn-ghost btn-circle avatar"
               >
-                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-700 font-bold">
+                {/* <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-700 font-bold">
                   {user.image ? (
                     <img
                       alt="Profile Avatar"
-                      src={user.image}
+                      src={userData.imgUrl}
                       className="w-10 h-10 rounded-full"
                     />
                   ) : (
@@ -142,6 +162,13 @@ const Navbar = () => {
                       {user.displayName?.charAt(0).toUpperCase()}
                     </span>
                   )}
+                </div> */}
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-700 font-bold">
+                  <img
+                    alt="Profile Avatar"
+                    src={ userData?.imgUrl}
+                    className="w-10 h-10 rounded-full"
+                  />
                 </div>
               </button>
               {isProfileOpen && (
@@ -165,7 +192,9 @@ const Navbar = () => {
                           handleLinkClick("update-profile");
                         }}
                         className={`${
-                          activeLink === "update-profile" ? "text-orange-400" : ""
+                          activeLink === "update-profile"
+                            ? "text-orange-400"
+                            : ""
                         }`}
                       >
                         Profile
@@ -183,6 +212,22 @@ const Navbar = () => {
                         }`}
                       >
                         Settings
+                      </Link>
+                    </li>
+                    <li className="py-2 hover:bg-gray-100 rounded-md px-4">
+                      <Link
+                        to="/changepassword"
+                        onClick={() => {
+                          setIsProfileOpen(false);
+                          handleLinkClick("changepassword");
+                        }}
+                        className={`${
+                          activeLink === "changepassword"
+                            ? "text-orange-400"
+                            : ""
+                        }`}
+                      >
+                        Change Password
                       </Link>
                     </li>
                     <li className="py-2 hover:bg-gray-100 rounded-md px-4">
