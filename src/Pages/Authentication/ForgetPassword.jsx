@@ -158,7 +158,6 @@ const ForgotPassword = () => {
         reset(); // Reset the email field after successful submission
       })
       .catch((error) => {
-        console.log("An error occurred",error)
         let errorMessage = "An error occurred. Please try again.";
         // Handle different Firebase error codes
         if (error.code === "auth/invalid-email") {

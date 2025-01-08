@@ -4,11 +4,10 @@ import ForgotPassword from "../Authentication/Forgetpassword";
 import Login from "../Authentication/Login";
 import Register from "../Authentication/Register";
 import VerifyEmail from "../Authentication/VerifyEmail";
+import Dashboard from "../Dashboard/Dashboard";
 import Home from "../HomePages/Home";
 import ChangePassword from "../ProfileUpdatePages/ChangePassword";
-import EditProfile from "../ProfileUpdatePages/EditProfile";
 import Profile from "../ProfileUpdatePages/Profile";
-import Dashboard from "../Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -37,24 +36,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
-<<<<<<< HEAD
+
         element: <Profile />,
-      },
-      {
-        path: "/edit-profile",
-        element: <EditProfile />,
       },
       {
         path: "/changepassword",
         element: <ChangePassword />,
-=======
-        element: <Profile />
       },
       {
         path: "/dashboard",
-        element: <Dashboard />
-
->>>>>>> 47c1c742ecaf01f76fa32a34bcbb75b81b1dae01
+        element: <Dashboard />,
       },
     ],
   },

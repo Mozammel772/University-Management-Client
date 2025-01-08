@@ -22,37 +22,19 @@ const Login = () => {
     signIn(data.email, data.password)
       .then((data) => {
         const user = data.user;
-        if (user.emailVerified === true) {
-          toast.success("Login Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } else {
-          toast.error(
-            "Email verification is required. Please check your inbox.",
-            {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            }
-          );
-          return;
-        }
+        toast.success("Login Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         navigate(from, { replace: true });
       })
       .catch((err) => {
-        console.log("Failed to", err.code);
         let errorMessage = "An unexpected error occurred. Please try again.";
         if (err.code === "auth/invalid-email") {
           errorMessage = "Invalid email address. Please enter a valid email.";

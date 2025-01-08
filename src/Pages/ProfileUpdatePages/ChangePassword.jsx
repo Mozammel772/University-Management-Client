@@ -1,8 +1,6 @@
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  updatePassword,
-} from "firebase/auth";
+
+import { getAuth, reauthenticateWithCredential, updatePassword } from "firebase/auth";
+import { EmailAuthProvider } from "firebase/auth/web-extension";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -24,31 +22,33 @@ const ChangePassword = () => {
   const userEmail = user?.email;
   const axiosPublic = useAxiosSecure();
 
+  
+
   const onSubmit = async (data) => {
     const { oldPassword, newPassword } = data;
     const auth = getAuth();
     const firebaseUser = auth.currentUser;
-
+    
     try {
       // Step 1: Reauthenticate the user
-      console.log("Reauthenticating user...");
-      await signInWithEmailAndPassword(auth, firebaseUser.email, oldPassword);
-      console.log("Reauthentication successful.");
-
+      const credential = EmailAuthProvider.credential(firebaseUser.email, oldPassword);
+      await reauthenticateWithCredential(firebaseUser, credential);
+  
       // Step 2: Update password in Firebase
-      console.log("Updating password in Firebase...");
       await updatePassword(firebaseUser, newPassword);
-      console.log("Firebase password update successful.");
-
-      // Step 3: Update password in the API (backend)
-      console.log("Updating password in the database...");
+      
+      // Step 3: Update password in the backend database
       const apiUpdateResult = await axiosPublic.patch(
         `/update-password/${userEmail}`,
         { oldPassword, newPassword }
       );
-
-      console.log("API response:", apiUpdateResult);
-
+      
+      if (apiUpdateResult.status !== 200) {
+        // If the backend password update fails, rollback Firebase password change
+        await updatePassword(firebaseUser, oldPassword);
+        throw new Error("Failed to update password in the database.");
+      }
+      
       // Success
       toast.success("Password updated successfully!", {
         position: "top-center",
@@ -61,21 +61,46 @@ const ChangePassword = () => {
         theme: "light",
       });
       reset();
+  
     } catch (error) {
-      console.error("Error updating password:", error);
-      toast.error("Failed to update password. Please check your inputs.", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      // Handle specific error types
+      if (error.code === "auth/requires-recent-login") {
+        toast.error("You need to re-login to update your password. Please sign in again.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else if (error.code === "auth/network-request-failed") {
+        toast.error("Network error occurred. Please check your internet connection.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error("Failed to update password. Please check your inputs.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
-
+  
   return (
     <div>
       <div className="hero bg-base-200 min-h-screen">
