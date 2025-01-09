@@ -425,13 +425,14 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 shadow-2xl  rounded-xl bg-white mt-40">
+   <div className="">
+     <div className=" max-w-md mx-auto p-10 shadow-2xl  rounded-xl bg-white mt-20">
       <h2 className="text-2xl font-bold text-center mb-4 font-sans">
         Register
       </h2>
 
       {/* Steps Indicator */}
-      <ul className="steps mb-6 w-full font-bold">
+      <ul className="steps mb-6 w-full font-bold ">
         <li className={`step ${step >= 1 ? "step-primary" : ""}`}>
           {step > 1 ? "✔️" : "Name"}
         </li>
@@ -589,7 +590,7 @@ const Register = () => {
               <div>
                  <div className="divider px-3">OR</div>
                 {" "}
-                <div>
+                <div className="">
                   <GoogleLogin />
                   {" "}
                 </div>
@@ -668,7 +669,7 @@ const Register = () => {
 
               <button
                 type="button"
-                className="btn btn-primary w-[50%] text-xl"
+                className="btn btn-primary w-[50%] text-md lg:text-xl"
                 onClick={sendVerificationEmail}
                 disabled={
                   sendVerificationLoading || !getValues("email") || errors.email
@@ -892,6 +893,7 @@ const Register = () => {
         )}
       </form>
     </div>
+   </div>
   );
 };
 

@@ -210,7 +210,7 @@ const Login = () => {
           </p>
           <div>
             <div className="divider px-3">OR</div>
-            <div>
+            <div className="w-5/6 mx-auto">
               <GoogleLogin />
             </div>
           </div>

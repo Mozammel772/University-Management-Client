@@ -42,7 +42,8 @@ const ProfileUpdate = () => {
     control,
     setValue,
     reset,
-    formState: { errors },
+
+    formState: { errors, isSubmitted },
   } = useForm();
 
   const handleProfileUpdate = async (data) => {
@@ -63,7 +64,6 @@ const ProfileUpdate = () => {
 
         if (imgbbResponse.data && imgbbResponse.data.data.url) {
           imageUrl = imgbbResponse.data.data.url; // Get the hosted image URL
-          
         }
       }
 
@@ -448,8 +448,12 @@ const ProfileUpdate = () => {
               {/* Update Button */}
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                disabled={loading}
+                className={`w-full py-2 px-4 rounded-lg ${
+                  loading || isSubmitted
+                    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+                disabled={loading || isSubmitted}
               >
                 {loading ? "Updating..." : "Update Profile"}
               </button>

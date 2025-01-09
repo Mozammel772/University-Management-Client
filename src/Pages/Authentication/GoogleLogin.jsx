@@ -30,7 +30,7 @@ const GoogleLogin = () => {
     <div className="my-6 text-center ">
       <button
         onClick={handleGoogleSignIn}
-        className="btn w-5/6 text-xl bg-orange-500 font-semibold text-white hover:bg-orange-600 rounded-lg shadow py-2 px-4"
+        className="btn w-full text-xl bg-orange-500 font-semibold text-white hover:bg-orange-600 rounded-lg shadow py-2 px-4"
       >
         <FaGoogle></FaGoogle>Google
       </button>
